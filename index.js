@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app =express()
 const port = process.env.PORT || 5000
@@ -45,12 +45,48 @@ app.post('/addCraft', async(req, res)=>{
   res.send(result)
 })
 
+app.put('/addCraft/:id', async(req,res)=>{
+  const id = req.params.id
+  const filter ={_id: new ObjectId(id)}
+  const options ={upsert:true}
+  const updatedCraft = req.body
+  const craft = {
+    $set:{
+      image:updatedCraft.image, 
+    name:updatedCraft.name, 
+    sub_category: updatedCraft.sub_category,
+    short_description: updatedCraft.short_description,
+    price:updatedCraft.price,
+    rating: updatedCraft.rating, 
+    customization: updatedCraft.customization, 
+    processing_time: updatedCraft.processing_time, 
+    stockStatus: updatedCraft.stockStatus, 
+    user_name: updatedCraft.user_name, 
+    user_email: updatedCraft.user_email
+    }
+  }
+  const result =await craftCollection.updateOne(filter, craft, options )
+  res.send(result)
+})
+
+
 app.get("/myProduct/:email", async(req,res)=>{
   console.log(req.params.email);
   const result = await craftCollection.find({email: req.params.email}).toArray()
   res.send(result)
   
 })
+
+
+
+app.get('/craft/:id', async(req,res)=>{
+  const id =req.params.id
+  const query ={_id: new ObjectId(id)}
+  const result =await craftCollection.findOne(query)
+  res.send(result)
+})
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
