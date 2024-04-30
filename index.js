@@ -44,7 +44,7 @@ app.post('/addCraft', async(req, res)=>{
   const result =await craftCollection.insertOne(info)
   res.send(result)
 })
-
+// rechecked
 app.put('/addCraft/:id', async(req,res)=>{
   const id = req.params.id
   const filter ={_id: new ObjectId(id)}
