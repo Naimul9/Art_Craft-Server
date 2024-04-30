@@ -69,6 +69,13 @@ app.put('/addCraft/:id', async(req,res)=>{
   res.send(result)
 })
 
+app.delete('/craft/:id', async(req,res)=>{
+  const id = req.params.id
+  const query ={_id: new ObjectId(id)}
+  const result = await craftCollection.deleteOne(query)
+  res.send(result)
+})
+
 
 app.get("/myProduct/:email", async(req,res)=>{
   console.log(req.params.email);
